@@ -1,0 +1,15 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: forohub-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: forohub_db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - forohub-db-data:/var/lib/mysql
+
+volumes:
+  forohub-db-data:
