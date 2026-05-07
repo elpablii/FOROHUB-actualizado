@@ -1,6 +1,6 @@
 # Documentación de Deuda Técnica y Bugs Inyectados
 
-Este documento detalla todas las fallas intencionales, malas prácticas, código muerto y errores de compilación que fueron inyectados deliberadamente en este proyecto como parte del **Escenario de Práctica Brownfield**. 
+Este documento detalla todas las fallas intencionales, malas prácticas, código muerto y errores de compilación que fueron inyectados deliberadamente en este proyecto. 
 
 Estos problemas fueron identificados y resueltos para lograr que el proyecto compile, conecte a la base de datos y funcione correctamente.
 
