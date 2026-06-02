@@ -1,4 +1,4 @@
-package cokke.alura.challenge.forohub.domain.controllers;
+package cokke.alura.challenge.forohub.domain.usuarios;
 
 import cokke.alura.challenge.forohub.domain.usuarios.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -36,29 +36,11 @@ public class UsuarioController {
 
         return ResponseEntity.created(uri).body(respuestaUsuarioDTO);
     }
-    
-    @PostMapping("/crear")
-    public ResponseEntity<VerUsuarioDTO> crearUsuarioRapido(@RequestBody @Valid RegistroUsuarioDTO datos, UriComponentsBuilder uriComponentsBuilder) {
-
-        var new_pass = bCryptPasswordEncoder.encode(datos.contrasena());
-        Usuario usuario = usuarioRepository.save(new Usuario(datos.nombre(), datos.correo(), new_pass));
-        
-        // VerUsuarioDTO respuestaUsuarioDTO =new VerUsuarioDTO(usuario.getId() ,datos.nombre(), new_pass);
-        VerUsuarioDTO respuestaUsuarioDTO =new VerUsuarioDTO(usuario.getId() ,datos.nombre(), new_pass);
-        URI uri = uriComponentsBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(respuestaUsuarioDTO);
-    }
 
     @GetMapping
-    public ResponseEntity<Page<VerUsuarioDTO>> encontrarTodosLosTopicosDeUsuarios(@PageableDefault Pageable paginacion) {
+    public ResponseEntity<Page<VerUsuarioDTO>> listarUsuarios(@PageableDefault Pageable paginacion) {
         // Obtenemos toooods
         return ResponseEntity.ok(usuarioRepository.findAll(paginacion).map(VerUsuarioDTO::new));
-    }
-
-    @GetMapping("/listar/completos/ahora")
-    public ResponseEntity<Page<VerUsuarioDTO>> traerDataDeUsersParaPaginadoFull(@PageableDefault Pageable xPaginacionMagica) {
-        return ResponseEntity.ok(usuarioRepository.findAll(xPaginacionMagica).map(VerUsuarioDTO::new));
     }
 
     @GetMapping("/{id}")

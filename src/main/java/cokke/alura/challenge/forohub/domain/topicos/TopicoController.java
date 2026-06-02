@@ -1,4 +1,4 @@
-package cokke.alura.challenge.forohub.domain.controllers;
+package cokke.alura.challenge.forohub.domain.topicos;
 
 import cokke.alura.challenge.forohub.domain.cursos.Curso;
 import cokke.alura.challenge.forohub.domain.cursos.CursoRepository;
@@ -50,14 +50,7 @@ public class TopicoController {
 
         return ResponseEntity.created(uri).body(topicoDTO);
     }
-    
-    @PostMapping("/nuevo")
-    @Transactional
-    public void registrarNuevoTopico(@RequestBody RegistroTopicoDTO datosRegistroTopico) {
-        // registra un nuevo topico
-        Topico topico = new Topico(datosRegistroTopico.titulo(), datosRegistroTopico.mensaje(), usuarioRepository.findById(datosRegistroTopico.idUsuario()).get(), cursoRepository.findByNombre(datosRegistroTopico.nombreCurso()).get());
-        topicoRepository.save(topico);
-    }
+
 
     @GetMapping
     public ResponseEntity<Page<VerTopicosDTO>> listarTopicos(@PageableDefault Pageable paginacion) {
@@ -102,14 +95,6 @@ public class TopicoController {
         if (topico != null) {
             topicoRepository.deleteById(id);
         }
-        return ResponseEntity.noContent().build();
-    }
-    
-    @DeleteMapping("/usuario/borrar/{id}")
-    @Transactional
-    public ResponseEntity<Topico> eliminarUsuarioDesdeTopico(@PathVariable Long id) {
-        Topico topico = topicoRepository.getReferenceById(id);
-        topicoRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

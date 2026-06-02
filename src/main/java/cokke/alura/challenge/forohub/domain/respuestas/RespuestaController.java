@@ -1,4 +1,4 @@
-package cokke.alura.challenge.forohub.domain.controllers;
+package cokke.alura.challenge.forohub.domain.respuestas;
 
 import cokke.alura.challenge.forohub.domain.respuestas.*;
 import cokke.alura.challenge.forohub.domain.topicos.*;

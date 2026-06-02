@@ -62,3 +62,6 @@ El sistema expone endpoints protegidos que cubren escenarios típicos de un sist
 Este repositorio está diseñado y adaptado deliberadamente para fungir como un **Escenario de Práctica Brownfield** dentro de la asignatura de Gestión de Tecnologías de Información.
 
 A diferencia del desarrollo tradicional *Greenfield* (crear software desde cero), este proyecto simula el día a día de un ingeniero de la industria que recibe un sistema legacy operativo pero con **deuda técnica, malas prácticas inyectadas y características incompletas**.
+
+> [!NOTE]
+> **Actualización Fase 2:** Tras el diagnóstico y la auditoría, toda la deuda técnica inicial y las vulnerabilidades inyectadas han sido identificadas y resueltas. El proyecto cuenta actualmente con una arquitectura limpia (controladores organizados por dominio), código seguro, y pruebas automatizadas, encontrándose estabilizado y listo para su **Fase 3: Integración de Frontend**.

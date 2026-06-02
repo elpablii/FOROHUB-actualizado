@@ -1,4 +1,4 @@
-package cokke.alura.challenge.forohub.domain.controllers;
+package cokke.alura.challenge.forohub.domain.usuarios;
 
 import cokke.alura.challenge.forohub.domain.usuarios.AutenticacionUsuarioDTO;
 import cokke.alura.challenge.forohub.domain.usuarios.Usuario;

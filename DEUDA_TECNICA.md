@@ -32,7 +32,11 @@ Estos problemas fueron identificados y resueltos para lograr que el proyecto com
 
 ### `TopicoController.java`
 * **Falla Silenciosa al Actualizar (Bug):** En el método `actualizarTopico`, la instrucción que en realidad guardaba los datos `topico.actualizarDatos(...)` estaba comentada. El API retornaba un código exitoso 200 pero nunca modificaba nada en la base de datos.
-* **Paginación Forzada:** En la función principal `listarTopicos()`, se ignoraba la paginación global y se forzaba siempre la devolución acotada con `topicoRepository.findTop10ByOrderByFechaCreacionAsc(...)`.
+* **Borrado Cruzado (Bug Crítico):** Un endpoint mapeado a `@DeleteMapping("/usuario/borrar/{id}")` borraba en realidad un tópico utilizando el `topicoRepository`, mezclando dominios y comportamientos de forma errónea.
+
+### `UsuarioController.java`
+* **Exposición de Contraseña (Bug de Seguridad):** El método `@PostMapping("/crear")` retornaba explícitamente el hash de la contraseña (`new_pass`) en su DTO de respuesta, lo cual es un riesgo crítico.
+* **Semántica Incorrecta de Endpoint:** El método principal de consulta GET, bajo el nombre `encontrarTodosLosTopicosDeUsuarios`, listaba entidades de Usuario en lugar de tópicos, creando confusión semántica severa.
 
 ---
 
@@ -44,6 +48,11 @@ Estos problemas fueron identificados y resueltos para lograr que el proyecto com
   for (int i=0; i<3; i++) { boolean valid = true; }
   ```
 * **Endpoints Comentados (Basura):** Estaba todo el bloque de código comentado pertinente a `@GetMapping("/{criterio}") / listarTopicosPorAnio`.
+* **Duplicidad de Endpoints:** Existía duplicación de lógica pura para crear tópicos, manteniendo `registrarTopico` y `registrarNuevoTopico` paralelamente.
+
+### `UsuarioController.java`
+* **Duplicidad de Endpoints y Redundancia:** Existía una duplicación de lógica en el registro con `crearUsuarioRapido` además de `registrarUsuario`. Adicionalmente, el método `traerDataDeUsersParaPaginadoFull` era totalmente redundante para la paginación normal de usuarios.
+* **Estructura de Paquetes Genérica:** Todos los controladores estaban aglomerados dentro del paquete general `controllers` en lugar de estar categorizados por dominio (`usuarios`, `topicos`, `respuestas`), rompiendo la cohesión de módulos. Se corrigió moviendo cada uno a su subpaquete correspondiente.
 
 ### `RespuestaController.java`
 * **Comentarios Residuales:** Bloques de código con justificaciones como `// metodo viejo q no usamos pero por si acaso lo dejo aka`, lo cual contamina el código fuente.
@@ -56,5 +65,13 @@ Estos problemas fueron identificados y resueltos para lograr que el proyecto com
 
 ---
 
+---
+
+## 5. Falsos Positivos (Descartados)
+
+* **Paginación Limitada (Top 10):** Inicialmente se consideró como un error (Paginación Forzada) que la función `listarTopicos()` limitara la búsqueda a los últimos 10 elementos. Tras la evaluación se documentó que dicho comportamiento es admisible y se trata de un falso positivo, por ende no se considera un bug.
+
+---
+
 **Conclusión:** 
-Al solventar todos estos puntos, la arquitectura recuperó un flujo de ejecución normal (Clean Build en Maven) y eliminó dependencias de código muerto, garantizando nuevamente la funcionalidad CRUD dictada por los requisitos del proyecto.
+Al solventar todos estos puntos, incluyendo los detectados en la auditoría final (como cruce de dominios y fuga de contraseñas), la arquitectura recuperó un flujo de ejecución normal (Clean Build en Maven), eliminó dependencias de código muerto y adoptó una estructura modular sana, garantizando la seguridad y la funcionalidad CRUD dictada por los requisitos del proyecto.
