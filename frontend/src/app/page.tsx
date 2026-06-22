@@ -1,32 +1,28 @@
 import Link from "next/link";
+import { fetchWithAuth, getAuthToken } from "@/services/api";
+import { PageResponse, Topico } from "@/types/api";
 
-// Datos de prueba simulando la API
-const MOCK_TOPICS = [
-  {
-    id: 1,
-    titulo: "¿Cómo configurar Spring Security con JWT?",
-    mensaje: "Estoy intentando proteger mis endpoints de una API REST. Ya configuré el filtro pero sigo recibiendo 403 Forbidden cuando intento pasar el token en el header Authorization. ¿Alguna idea de qué puede ser?",
-    fechaCreacion: "2026-06-03",
-    status: "NO_RESPONDIDO",
-    autor: { nombre: "Juan Perez" },
-    curso: { nombre: "Spring Boot" },
-    respuestasCount: 0
-  },
-  {
-    id: 2,
-    titulo: "Duda con UseEffect en React",
-    mensaje: "Tengo un problema extraño. El componente se renderiza dos veces cuando inicio la aplicación. Estoy usando React 18 en modo estricto. ¿Es este el comportamiento normal o tengo un error en mi UseEffect?",
-    fechaCreacion: "2026-06-02",
-    status: "RESUELTO",
-    autor: { nombre: "Maria Gomez" },
-    curso: { nombre: "React" },
-    respuestasCount: 3
+export default async function Home() {
+  const token = await getAuthToken();
+  let topicos: Topico[] = [];
+  let error: string | null = null;
+
+  if (token) {
+    try {
+      const res = await fetchWithAuth('/topicos');
+      if (res.ok) {
+        const data: PageResponse<Topico> = await res.json();
+        topicos = data.content;
+      } else {
+        error = 'La sesión expiró o no tienes acceso. Intenta iniciar sesión nuevamente.';
+      }
+    } catch (e) {
+      error = 'No se pudo conectar con el servidor backend.';
+    }
   }
-];
 
-export default function Home() {
   return (
-    <div className="container mx-auto px-4 py-12 max-w-5xl">
+    <div className="container mx-auto px-4 py-12 max-w-5xl flex-1">
       {/* Hero Section */}
       <section className="text-center py-16 px-4 bg-gradient-to-b from-primary/10 to-transparent rounded-3xl mb-12 border border-primary/10">
         <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">
@@ -59,38 +55,53 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col gap-4">
-            {MOCK_TOPICS.map((topico) => (
-              <div key={topico.id} className="p-6 rounded-2xl border border-black/10 dark:border-white/10 hover:border-primary/50 transition-colors bg-white dark:bg-black/20 group cursor-pointer relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-1 h-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="flex justify-between items-start mb-3">
-                  <div className="flex gap-2 items-center">
-                    <span className="text-xs font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-1 rounded-md">
-                      {topico.curso.nombre}
-                    </span>
-                    <span className={`text-xs font-bold px-2 py-1 rounded-md ${
-                      topico.status === 'RESUELTO' 
-                        ? 'bg-green-500/10 text-green-600 dark:text-green-400' 
-                        : 'bg-orange-500/10 text-orange-600 dark:text-orange-400'
-                    }`}>
-                      {topico.status.replace('_', ' ')}
-                    </span>
-                  </div>
-                  <span className="text-sm opacity-50">{topico.fechaCreacion}</span>
-                </div>
-                <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">{topico.titulo}</h3>
-                <p className="opacity-70 line-clamp-2 mb-4 text-sm">{topico.mensaje}</p>
-                <div className="flex items-center justify-between mt-auto pt-4 border-t border-black/5 dark:border-white/5">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-primary to-purple-500"></div>
-                    <span className="text-sm font-medium">{topico.autor.nombre}</span>
-                  </div>
-                  <div className="text-sm opacity-60 flex items-center gap-1">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                    {topico.respuestasCount} respuestas
-                  </div>
-                </div>
+            {!token ? (
+              <div className="text-center p-12 rounded-2xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5">
+                <h3 className="text-xl font-bold mb-2">Inicia sesión para ver los tópicos</h3>
+                <p className="opacity-70 mb-6">Debes estar registrado y autenticado para interactuar con la comunidad.</p>
+                <Link href="/login" className="bg-primary text-primary-foreground px-6 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity">
+                  Ir al Login
+                </Link>
               </div>
-            ))}
+            ) : error ? (
+              <div className="text-center p-8 rounded-2xl border border-red-500/20 bg-red-500/10 text-red-500">
+                <p>{error}</p>
+                <Link href="/login" className="inline-block mt-4 text-sm font-bold underline">Volver a intentar</Link>
+              </div>
+            ) : topicos.length === 0 ? (
+              <div className="text-center p-8 rounded-2xl border border-black/10 dark:border-white/10">
+                <p className="opacity-70">Aún no hay tópicos publicados.</p>
+              </div>
+            ) : (
+              topicos.map((topico) => (
+                <div key={topico.id} className="p-6 rounded-2xl border border-black/10 dark:border-white/10 hover:border-primary/50 transition-colors bg-white dark:bg-black/20 group cursor-pointer relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="flex gap-2 items-center">
+                      <span className="text-xs font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-1 rounded-md">
+                        {topico.curso}
+                      </span>
+                      <span className={`text-xs font-bold px-2 py-1 rounded-md ${
+                        topico.estado === 'RESUELTO' 
+                          ? 'bg-green-500/10 text-green-600 dark:text-green-400' 
+                          : 'bg-orange-500/10 text-orange-600 dark:text-orange-400'
+                      }`}>
+                        {topico.estado.replace('_', ' ')}
+                      </span>
+                    </div>
+                    <span className="text-sm opacity-50">{new Date(topico.fechaCreacion).toLocaleDateString()}</span>
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">{topico.titulo}</h3>
+                  <p className="opacity-70 line-clamp-2 mb-4 text-sm">{topico.mensaje}</p>
+                  <div className="flex items-center justify-between mt-auto pt-4 border-t border-black/5 dark:border-white/5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-primary to-purple-500"></div>
+                      <span className="text-sm font-medium">{topico.usuario}</span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
 
 const inter = Inter({
@@ -12,11 +13,14 @@ export const metadata: Metadata = {
   description: "",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('jwt')?.value;
+
   return (
     <html lang="es" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground transition-colors duration-300">
@@ -31,8 +35,23 @@ export default function RootLayout({
               <a href="#" className="text-sm font-medium hover:text-primary transition-colors">Cursos</a>
             </nav>
             <div className="flex items-center gap-4">
-              <a href="/login" className="text-sm font-medium hover:text-primary transition-colors">Entrar</a>
-              <a href="/register" className="text-sm font-medium bg-primary text-primary-foreground px-4 py-2 rounded-full hover:opacity-90 transition-opacity">Regístrate</a>
+              {token ? (
+                <form action={async () => {
+                  'use server';
+                  const { cookies } = await import('next/headers');
+                  const { redirect } = await import('next/navigation');
+                  const cookieStore = await cookies();
+                  cookieStore.delete('jwt');
+                  redirect('/');
+                }}>
+                  <button type="submit" className="text-sm font-medium hover:text-primary transition-colors text-red-500">Cerrar sesión</button>
+                </form>
+              ) : (
+                <>
+                  <a href="/login" className="text-sm font-medium hover:text-primary transition-colors">Entrar</a>
+                  <a href="/register" className="text-sm font-medium bg-primary text-primary-foreground px-4 py-2 rounded-full hover:opacity-90 transition-opacity">Regístrate</a>
+                </>
+              )}
             </div>
           </div>
         </header>
