@@ -32,7 +32,7 @@ export default async function RootLayout({
             </div>
             <nav className="hidden md:flex gap-6">
               <a href="/" className="text-sm font-medium hover:text-primary transition-colors">Inicio</a>
-              <a href="#" className="text-sm font-medium hover:text-primary transition-colors">Cursos</a>
+              <a href="/cursos" className="text-sm font-medium hover:text-primary transition-colors">Cursos</a>
             </nav>
             <div className="flex items-center gap-4">
               {token ? (

@@ -35,9 +35,9 @@ export default async function Home() {
           <Link href="/nuevo-topico" className="bg-primary text-primary-foreground px-6 py-3 rounded-full font-semibold text-lg hover:shadow-lg hover:opacity-90 transition-all">
             Hacer una Pregunta
           </Link>
-          <button className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 px-6 py-3 rounded-full font-semibold text-lg hover:bg-black/10 dark:hover:bg-white/10 transition-all">
+          <Link href="/topicos" className="inline-block bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 px-6 py-3 rounded-full font-semibold text-lg hover:bg-black/10 dark:hover:bg-white/10 transition-all">
             Explorar Tópicos
-          </button>
+          </Link>
         </div>
       </section>
 
