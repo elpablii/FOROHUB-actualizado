@@ -6,6 +6,7 @@ Bienvenido a ForoHub, una API RESTful para la gestión de un foro. Esta guía te
 
 - Java 17 o superior.
 - Maven.
+- Node.js y npm (para el frontend).
 - Docker y Docker Compose.
 - IDE de tu preferencia (IntelliJ IDEA, VS Code, etc.).
 
@@ -37,6 +38,19 @@ Para levantar el servidor de Spring Boot, ejecuta:
 ```
 La API estará disponible en `http://localhost:8080`.
 
+### 4. Instalar y Ejecutar el Frontend
+
+El proyecto cuenta con una interfaz web desarrollada en Next.js. Para levantarla, abre una nueva terminal, ve al directorio `frontend` e instala las dependencias:
+```bash
+cd frontend
+npm install
+```
+Luego, inicia el servidor de desarrollo:
+```bash
+npm run dev
+```
+La aplicación web estará disponible en `http://localhost:3000`.
+
 ## Funcionalidades Básicas y Lógica de Negocio
 
 El sistema expone endpoints protegidos que cubren escenarios típicos de un sistema de preguntas y respuestas (estilo StackOverflow o Alura Foro):
@@ -59,9 +73,11 @@ El sistema expone endpoints protegidos que cubren escenarios típicos de un sist
 
 ## Integración con Proyecto "Brownfield" (Mantenimiento Evolutivo de Software)
 
-Este repositorio está diseñado y adaptado deliberadamente para fungir como un **Escenario de Práctica Brownfield** dentro de la asignatura de Gestión de Tecnologías de Información.
+Este repositorio está diseñado y adaptado deliberadamente para fungir como un **Escenario de Práctica Brownfield** dentro de la asignatura de Proyecto Desarrollo Ágil Escalado.
 
 A diferencia del desarrollo tradicional *Greenfield* (crear software desde cero), este proyecto simula el día a día de un ingeniero de la industria que recibe un sistema legacy operativo pero con **deuda técnica, malas prácticas inyectadas y características incompletas**.
 
 > [!NOTE]
-> **Actualización Fase 2:** Tras el diagnóstico y la auditoría, toda la deuda técnica inicial y las vulnerabilidades inyectadas han sido identificadas y resueltas. El proyecto cuenta actualmente con una arquitectura limpia (controladores organizados por dominio), código seguro, y pruebas automatizadas, encontrándose estabilizado y listo para su **Fase 3: Integración de Frontend**.
+> **Actualización Fase 2:** Tras el diagnóstico y la auditoría, toda la deuda técnica inicial y las vulnerabilidades inyectadas han sido identificadas y resueltas. El proyecto cuenta con una arquitectura limpia (controladores organizados por dominio), código seguro y pruebas automatizadas, encontrándose estabilizado.
+> 
+> **Actualización Fase 3:** Se ha integrado exitosamente el **Frontend**. El proyecto cuenta ahora con una interfaz gráfica moderna desarrollada en Next.js, lo que lo convierte en un sistema Full-Stack completamente funcional que interactúa con la API RESTful de las fases previas.
