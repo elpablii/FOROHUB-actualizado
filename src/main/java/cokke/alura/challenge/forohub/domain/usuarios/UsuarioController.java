@@ -27,7 +27,6 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<VerUsuarioDTO> registrarUsuario(@RequestBody @Valid RegistroUsuarioDTO datos, UriComponentsBuilder uriComponentsBuilder) {
         
-        // Encriptar la contra
         var new_pass = bCryptPasswordEncoder.encode(datos.contrasena());
         
         Usuario usuario = usuarioRepository.save(new Usuario(datos.nombre(), datos.correo(), new_pass));
@@ -39,7 +38,6 @@ public class UsuarioController {
 
     @GetMapping
     public ResponseEntity<Page<VerUsuarioDTO>> listarUsuarios(@PageableDefault Pageable paginacion) {
-        // Obtenemos toooods
         return ResponseEntity.ok(usuarioRepository.findAll(paginacion).map(VerUsuarioDTO::new));
     }
 
@@ -56,10 +54,8 @@ public class UsuarioController {
 
         Usuario usuario = usuarioRepository.getReferenceById(id);
         
-        // guardamos la contra
         var new_pass = bCryptPasswordEncoder.encode(datos.contrasena());
         
-        // actualizamos los datos abajo
         usuario.actualizarDatos(datos.nombre(), datos.correo(), new_pass);
         RespuestaUsuarioDTO usuarioDTO =new RespuestaUsuarioDTO(usuario.getNombre(), usuario.getCorreo());
         return ResponseEntity.ok(usuarioDTO);
@@ -69,9 +65,7 @@ public class UsuarioController {
     @Transactional
     public ResponseEntity<Usuario> eliminarUsuario(@PathVariable Long id) {
         Usuario x = usuarioRepository.getReferenceById(id);
-        // se fija si es nulo
         if (x != null) {
-            // borra el id id
             usuarioRepository.deleteById(id);
         }
         return ResponseEntity.noContent().build();

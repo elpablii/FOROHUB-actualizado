@@ -73,5 +73,23 @@ Estos problemas fueron identificados y resueltos para lograr que el proyecto com
 
 ---
 
+## 6. Deuda Técnica Adicional Resuelta
+
+Durante la última auditoría minuciosa, se detectaron y resolvieron los siguientes detalles residuales:
+
+### `RespuestaController.java`
+* **Duplicidad de Endpoints:** Se eliminó el método `obtenerRespuestas` que apuntaba a `/traerTodas`, ya que era una copia exacta y redundante de `listarRespuestas`.
+
+### `UsuarioController.java`
+* **Comentarios No Profesionales:** Se limpió el código eliminando comentarios con tono informal y obvio (ej. `// Obtenemos toooods`, `// Encriptar la contra`, `// borra el id id`), mejorando la legibilidad y el estándar profesional del código.
+
+### `TopicoController.java`
+* **Comentarios Residuales Falsos:** Se eliminó el comentario `// error de sintaxis falta la coma` que había quedado olvidado después de que el error real ya había sido corregido.
+
+### `SpringDocConfiguration.java`
+* **Código de Depuración (Debug):** Se removió un `System.out.println("Bearer is working");` que había sido dejado por accidente. Escribir a la consola estándar es una mala práctica en producción; los logs deben manejarse con un Logger adecuado.
+
+---
+
 **Conclusión:** 
 Al solventar todos estos puntos, incluyendo los detectados en la auditoría final (como cruce de dominios y fuga de contraseñas), la arquitectura recuperó un flujo de ejecución normal (Clean Build en Maven), eliminó dependencias de código muerto y adoptó una estructura modular sana, garantizando la seguridad y la funcionalidad CRUD dictada por los requisitos del proyecto.

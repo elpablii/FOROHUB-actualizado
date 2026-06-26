@@ -61,7 +61,7 @@ public class TopicoController {
     }
 
     @GetMapping("/curso/{nombreCurso}")
-    public ResponseEntity<Page<VerTopicosDTO>> listarTopicosPorNombreCurso(@PathVariable String nombreCurso, @PageableDefault Pageable paginacion) { // error de sintaxis falta  la coma
+    public ResponseEntity<Page<VerTopicosDTO>> listarTopicosPorNombreCurso(@PathVariable String nombreCurso, @PageableDefault Pageable paginacion) {
 
         // Listar los topicos por nombre del curso
         return ResponseEntity.ok(topicoRepository.encontrarPorNombreCurso(nombreCurso.replace("%", " "), paginacion).map(VerTopicosDTO::new));
