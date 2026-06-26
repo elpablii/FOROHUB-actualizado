@@ -60,7 +60,7 @@ public class TopicoController {
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(VerTopicosDTO::new));
     }
 
-    @GetMapping("/{nombreCurso}")
+    @GetMapping("/curso/{nombreCurso}")
     public ResponseEntity<Page<VerTopicosDTO>> listarTopicosPorNombreCurso(@PathVariable String nombreCurso, @PageableDefault Pageable paginacion) { // error de sintaxis falta  la coma
 
         // Listar los topicos por nombre del curso

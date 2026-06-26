@@ -8,6 +8,20 @@ export interface Topico {
   curso: string;
 }
 
+export interface Curso {
+  id: number;
+  nombre: string;
+  categoria: string;
+}
+
+export interface Respuesta {
+  id: number;
+  nombreAutor: string;
+  mensaje: string;
+  solucion: string;
+  fechaCreacion: string;
+}
+
 export interface PageResponse<T> {
   content: T[];
   pageable: {

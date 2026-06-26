@@ -18,11 +18,17 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0f172a;
+    --background: #0B1120;
     --foreground: #f8fafc;
     --primary: #6366f1;
     --primary-foreground: #ffffff;
   }
+}
+
+/* Fix select options contrast in dark mode */
+option {
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 body {

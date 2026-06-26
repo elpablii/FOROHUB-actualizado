@@ -53,3 +53,49 @@ export async function crearTopicoAction(prevState: any, formData: FormData) {
   // Redirigir al home al terminar
   redirect('/');
 }
+
+export async function crearRespuestaAction(prevState: any, formData: FormData) {
+  const mensaje = formData.get('mensaje') as string;
+  const tituloTopico = formData.get('tituloTopico') as string;
+  const idTopico = formData.get('idTopico') as string; // For redirecting back
+
+  const cookieStore = await cookies();
+  const token = cookieStore.get('jwt')?.value;
+
+  if (!token) {
+    redirect('/login');
+  }
+
+  try {
+    const decoded: any = jwtDecode(token);
+    const idUsuario = decoded.id;
+
+    if (!idUsuario) {
+      return { error: 'Token inválido o sin ID de usuario' };
+    }
+
+    const response = await fetch(`${API_URL}/respuestas`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        mensaje,
+        tituloTopico,
+        idUsuario,
+        solucion: 'NO_RESUELTO' // Default status for a response
+      }),
+    });
+
+    if (!response.ok) {
+      return { error: 'Error al enviar la respuesta.' };
+    }
+
+  } catch (error) {
+    console.error('Error al crear respuesta:', error);
+    return { error: 'Error de conexión con el servidor' };
+  }
+
+  redirect(`/topicos/${idTopico}`);
+}

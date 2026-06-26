@@ -18,7 +18,7 @@ export default async function TopicosPage({
     try {
       // Si hay un filtro de curso, llamamos al endpoint correspondiente
       const endpoint = cursoFilter 
-        ? `/topicos/${encodeURIComponent(cursoFilter)}` 
+        ? `/topicos/curso/${encodeURIComponent(cursoFilter)}` 
         : '/topicos';
         
       const res = await fetchWithAuth(endpoint);
@@ -74,14 +74,15 @@ export default async function TopicosPage({
           </div>
         ) : (
           topicos.map((topico) => (
-            <div key={topico.id} className="p-6 rounded-2xl border border-black/10 dark:border-white/10 hover:border-primary/50 transition-all hover:shadow-md bg-white dark:bg-black/20 group cursor-pointer relative overflow-hidden flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
+            <Link href={`/topicos/${topico.id}`} key={topico.id} className="block p-6 rounded-2xl border border-black/10 dark:border-white/10 hover:border-primary/50 transition-all hover:shadow-md bg-white dark:bg-black/20 group cursor-pointer relative overflow-hidden">
+              <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
               <div className="absolute left-0 top-0 w-1 h-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
               
               <div className="flex-1">
                 <div className="flex gap-2 items-center mb-3">
-                  <Link href={`/topicos?curso=${encodeURIComponent(topico.curso)}`} className="text-xs font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-1 rounded-md hover:bg-primary hover:text-primary-foreground transition-colors">
+                  <span className="text-xs font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-1 rounded-md">
                     {topico.curso}
-                  </Link>
+                  </span>
                   <span className={`text-xs font-bold px-2 py-1 rounded-md ${
                     topico.estado === 'RESUELTO' 
                       ? 'bg-green-500/10 text-green-600 dark:text-green-400' 
@@ -104,7 +105,8 @@ export default async function TopicosPage({
                 <span>•</span>
                 <span>{new Date(topico.fechaCreacion).toLocaleDateString()}</span>
               </div>
-            </div>
+              </div>
+            </Link>
           ))
         )}
       </div>

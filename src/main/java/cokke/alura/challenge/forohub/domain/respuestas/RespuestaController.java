@@ -62,6 +62,11 @@ public class RespuestaController {
         return ResponseEntity.ok(respuestaRepository.findAll(paginacion).map(RespuestaRespuestaDTO::new));
     }
 
+    @GetMapping("/topico/{topicoId}")
+    public ResponseEntity<Page<RespuestaRespuestaDTO>> listarRespuestasPorTopico(@PathVariable Long topicoId, @PageableDefault Pageable paginacion) {
+        return ResponseEntity.ok(respuestaRepository.findByTopicoId(topicoId, paginacion).map(RespuestaRespuestaDTO::new));
+    }
+
     @GetMapping("/traerTodas")
     public ResponseEntity<Page<RespuestaRespuestaDTO>> obtenerRespuestas(@PageableDefault Pageable paginacion) {
         return ResponseEntity.ok(respuestaRepository.findAll(paginacion).map(RespuestaRespuestaDTO::new));

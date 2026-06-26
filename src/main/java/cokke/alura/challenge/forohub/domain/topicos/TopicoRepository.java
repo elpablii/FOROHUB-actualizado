@@ -19,7 +19,7 @@ public interface TopicoRepository extends JpaRepository<Topico, Long> {
         select t from Topico t
         join Curso c
         on c.id = t.curso.id
-        where c.id = :nombre
+        where c.nombre = :nombre
     """)
     Page<Topico> encontrarPorNombreCurso(String nombre, Pageable paginacion);
 }
